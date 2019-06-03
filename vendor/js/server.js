@@ -1,7 +1,26 @@
 $(document).ready(function(){
-    $("#signup").submit(function (event) {
-        $.post("http://localhost:3000/admin/signup", $("#signup").serialize(), function (data) {
-            alert(JSON.stringify(data.message)) //data is the response from the backend
+    var username = localStorage.getItem('username');
+    var password = localStorage.getItem('password');
+    var firstname = localStorage.getItem('firstname');
+    var lastname = localStorage.getItem('lastname');
+    $("#cont").html(firstname + " " + lastname);
+
+    $("#signin").submit(function (event) {
+        $.post("http://localhost:3000/admin/signin", $("#signin").serialize(), function (data) {
+            //alert(JSON.stringify(data.UserDetails[0].ID)) //data is the response from the backend
+            localStorage.setItem('username', data.UserDetails[0].Username);
+            localStorage.setItem('password', data.UserDetails[0].Password);
+            localStorage.setItem('firstname', data.UserDetails[0].Firstname);
+            localStorage.setItem('lastname', data.UserDetails[0].Lastname);
+
+            window.location.href = 'admin/index.html';
+        });
+        event.preventDefault();
+    });
+
+    $("#c_signin").submit(function (event) {
+        $.post("http://localhost:3000/user/signin", $("#c_signin").serialize(), function (data) {
+            alert(JSON.stringify(data)) //data is the response from the backend
         });
         event.preventDefault();
     });
