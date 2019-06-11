@@ -65,7 +65,7 @@
         <hr>
 
         <!-- Date/Time -->
-        <p>Posted on January 1, 2019 at 12:00 PM</p>
+        <p id="today_date"></p>
 
         <hr>
 
@@ -80,15 +80,10 @@
                 <th scope="col">Home Team</th>
                 <th scope="col">Scoreline</th>
                 <th scope="col">Away Team</th>
+                <th scope="col">Status</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>03-05-2019 05:00</td>
-                <td>Arsenal</td>
-                <td>0 - 0</td>
-                <td>Chelsea</td>
-              </tr>
+            <tbody id="today_ongoing_fixture_home">
             </tbody>
         </table>
     </div>
@@ -121,21 +116,44 @@
           </div>
         </div>
     </div>
-    <!-- Sidebar Widgets Column -->
-    <div class="col-md-4">
-
-        <!-- Search Widget -->
-        <div class="card my-4">
-            <h5 class="card-header">Search</h5>
-            <div class="card-body">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-secondary" type="button">Go!</button>
-                </span>
+    <!-- User Registration -->
+    <div class="modal fade" id="user_reg" tabindex="-1" role="dialog" aria-labelledby="user_reg" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                  <h5 class="modal-title" id="">Go Scores - User Registration</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <div class="input-group">
+                            <form class="row" id="user_reg_form">
+                                <div class="form-group col-md-12">
+                                    <input type="text" class="form-control" id="txtFirstname" name="txtFirstname" placeholder="Enter Firstname" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <input type="text" class="form-control" id="txtLastname" name="txtLastname" placeholder=" Enter Lastname" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <input type="text" class="form-control" id="txtClientRegUsername" name="txtClientRegUsername" placeholder=" Enter Username" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <input type="password" class="form-control" id="txtClientRegPassword" name="txtClientRegPassword" placeholder=" Enter Password" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <input type="submit" class="btn btn-primary" value="Register">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
               </div>
             </div>
         </div>
+    <!-- Sidebar Widgets Column -->
+    <div class="col-md-4">
 
         <!-- Search Widget -->
         <div class="card my-4">
@@ -151,18 +169,28 @@
                         </div>
                         <div class="form-group col-md-12">
                             <input type="submit" class="btn btn-primary" value="Login">&nbsp;&nbsp;|&nbsp;&nbsp;
-                            <a href="#">Register Here</a>
+                            <a href="#" data-toggle="modal" data-target="#user_reg">Register Here</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Side Widget -->
+        <!-- Search Widget -->
         <div class="card my-4">
-            <h5 class="card-header">Side Widget</h5>
+            <h5 class="card-header">Upcoming Matches (Today)</h5>
             <div class="card-body">
-                You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
+                <table class="table mt-2">
+                    <thead>
+                        <tr>
+                            <th scope="col">Home</th>
+                            <th scope="col" class="text-center"></th>
+                            <th scope="col">Away</th>
+                        </tr>
+                    </thead>
+                    <tbody id="today_pending_fixture_side">
+                    </tbody>
+                </table>
             </div>
         </div>
 
