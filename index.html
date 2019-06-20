@@ -16,6 +16,17 @@
   <!-- Custom styles for this template -->
   <link href="css/blog-post.css" rel="stylesheet">
 
+  <script>
+    var client_username = localStorage.getItem("client_user");
+    var admin_username = localStorage.getItem("username");
+
+    if (client_username !== null) {
+      window.location.href = "users/index.html";
+    } else if (admin_username !== null) {
+      window.location.href = "admin/index.html";
+    }
+  </script>
+
 </head>
 
 <body>
@@ -118,40 +129,41 @@
     </div>
     <!-- User Registration -->
     <div class="modal fade" id="user_reg" tabindex="-1" role="dialog" aria-labelledby="user_reg" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                  <h5 class="modal-title" id="">Go Scores - User Registration</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                    <div class="card-body">
-                        <div class="input-group">
-                            <form class="row" id="user_reg_form">
-                                <div class="form-group col-md-12">
-                                    <input type="text" class="form-control" id="txtFirstname" name="txtFirstname" placeholder="Enter Firstname" required>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <input type="text" class="form-control" id="txtLastname" name="txtLastname" placeholder=" Enter Lastname" required>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <input type="text" class="form-control" id="txtClientRegUsername" name="txtClientRegUsername" placeholder=" Enter Username" required>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <input type="password" class="form-control" id="txtClientRegPassword" name="txtClientRegPassword" placeholder=" Enter Password" required>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <input type="submit" class="btn btn-primary" value="Register">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="">Go Scores - User Registration</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="card-body">
+                  <div id="success_msg"></div>
+                  <div class="input-group">
+                      <form class="row" id="user_reg_form">
+                          <div class="form-group col-md-12">
+                              <input type="text" class="form-control" id="txtFirstname" name="txtFirstname" placeholder="Enter Firstname" required>
+                          </div>
+                          <div class="form-group col-md-12">
+                              <input type="text" class="form-control" id="txtLastname" name="txtLastname" placeholder=" Enter Lastname" required>
+                          </div>
+                          <div class="form-group col-md-12">
+                              <input type="text" class="form-control" id="txtClientRegUsername" name="txtClientRegUsername" placeholder=" Enter Username" required>
+                          </div>
+                          <div class="form-group col-md-12">
+                              <input type="password" class="form-control" id="txtClientRegPassword" name="txtClientRegPassword" placeholder=" Enter Password" required>
+                          </div>
+                          <div class="form-group col-md-12">
+                              <input type="submit" class="btn btn-primary" value="Register">
+                          </div>
+                      </form>
+                  </div>
               </div>
-            </div>
+          </div>
         </div>
+      </div>
+    </div>
     <!-- Sidebar Widgets Column -->
     <div class="col-md-4">
 
@@ -160,12 +172,12 @@
             <h5 class="card-header bg-primary text-white">Client Login</h5>
             <div class="card-body">
                 <div class="input-group">
-                    <form class="row">
+                    <form class="row" id="client_login">
                         <div class="form-group col-md-12">
-                        <input type="text" class="form-control" id="txtUsername" name="txtUsername" placeholder="Enter Username">
+                          <input type="text" class="form-control" id="txtClientUsername" name="txtClientUsername" placeholder="Enter Username" required>
                         </div>
                         <div class="form-group col-md-12">
-                        <input type="password" class="form-control" id="txtPassword" name="txtPassword" placeholder=" Enter Password">
+                          <input type="password" class="form-control" id="txtClientPassword" name="txtClientPassword" placeholder=" Enter Password" required>
                         </div>
                         <div class="form-group col-md-12">
                             <input type="submit" class="btn btn-primary" value="Login">&nbsp;&nbsp;|&nbsp;&nbsp;

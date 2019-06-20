@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Go Scores</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../vendor/bootstrap/css/bootstrap-datetimepicker.css" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="../css/blog-post.css" rel="stylesheet">
+  <script>
+      if (localStorage.getItem('client_user') == null) {
+        window.location.href = "../index.html";
+      }
+  </script>
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Go Scores</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="logout()">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+<div class="container">
+
+    <div class="row">
+
+        <!-- Post Content Column -->
+        <div class="col-lg-8">
+
+            <h1 class="mt-4" id="client_cont"></h1>
+
+            <hr>
+
+            <!-- Date/Time -->
+            <p id="today_date"></p>
+
+            <hr>
+
+            <!-- Preview Image -->
+            <!-- <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="">
+
+            <hr> -->
+            <ul class="nav nav-pills justify-content-end" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="fixtures-tab" data-toggle="tab" href="#fixtures" role="tab" aria-controls="fixtures" aria-selected="true" onclick="getAllOngoingFixturesClient()">Ongoing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pending-tab" data-toggle="tab" href="#pending" role="tab" aria-controls="pending" aria-selected="false" onclick="getAllTodayFixturesClient()">Pending</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="finished-tab" data-toggle="tab" href="#finished" role="tab" aria-controls="finished" aria-selected="false" onclick="finishedMatches()">Finished</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false">All Teams</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="row mt-2">
+                    <input class="form-control col-md-12" type="text" id="txtSearchOngoingMatch" name="txtSearchOngoingMatch" placeholder="Search Ongoing Match" onkeyup="SearchOngoingMatch()">
+                </div>
+                <div class="tab-pane fade show active" id="fixtures" role="tabpanel" aria-labelledby="fixtures-tab">
+                    <table class="table mt-2">
+                        <thead>
+                            <tr>
+                                <th scope="col">Time</th>
+                                <th scope="col">Home Team</th>
+                                <th scope="col">Scoreline</th>
+                                <th scope="col">Away Team</th>
+                            </tr>
+                        </thead>
+                        <tbody id="today_ongoing_fixture_client">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                    <table class="table mt-2">
+                        <thead>
+                            <tr>
+                                <th scope="col">Time</th>
+                                <th scope="col">Home Team</th>
+                                <th scope="col">Scoreline</th>
+                                <th scope="col">Away Team</th>
+                            </tr>
+                        </thead>
+                        <tbody id="today_pending_fixture_client">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="finished" role="tabpanel" aria-labelledby="finished-tab">
+                    <table class="table mt-2">
+                        <thead>
+                            <tr>
+                                <th scope="col">Time</th>
+                                <th scope="col">Home Team</th>
+                                <th scope="col">Scoreline</th>
+                                <th scope="col">Away Team</th>
+                            </tr>
+                        </thead>
+                        <tbody id="finished_fixture">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
+                    <table class="table mt-2">
+                        <thead>
+                            <tr>
+                                <th scope="col">S/N</th>
+                                <th scope="col">Team Name</th>
+                                <th scope="col">Details</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="teams">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
+    <!-- Sidebar Widgets Column -->
+    <div class="col-md-4">
+
+        <!-- Search Widget -->
+        <div class="card my-4">
+            <h5 class="card-header">Ongoing Matches (Today)</h5>
+            <div class="card-body">
+                <table class="table mt-2">
+                    <thead>
+                        <tr>
+                            <th scope="col">Home</th>
+                            <th scope="col" class="text-center"></th>
+                            <th scope="col">Away</th>
+                        </tr>
+                    </thead>
+                    <tbody id="today_ongoing_fixture_side">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Search Widget -->
+        <div class="card my-4">
+            <h5 class="card-header">Upcoming Matches (Today)</h5>
+            <div class="card-body">
+                <table class="table mt-2">
+                    <thead>
+                        <tr>
+                            <th scope="col">Home</th>
+                            <th scope="col" class="text-center"></th>
+                            <th scope="col">Away</th>
+                        </tr>
+                    </thead>
+                    <tbody id="today_pending_fixture_side">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="../vendor/jquery/jquery.min.js"></script>
+  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../vendor/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+  <script src="../vendor/js/server.js"></script>
+  <script src="../vendor/js/bootbox.js"></script>
+  <script src="../vendor/js/bootbox.all.js"></script>
+  <script src="../vendor/js/bootbox.locales.js"></script>
+  <script>
+        $(function () {
+            $('#datetimepicker1').datetimepicker();
+        });
+  </script>
+
+</body>
+
+</html>

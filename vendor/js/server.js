@@ -6,6 +6,8 @@ $(document).ready(function(){
     finishedMatches(); // All finished matches
     sideongoing(); // All ongoing in sidebar
     sidepending(); // All pending in sidebar
+    getAllOngoingFixturesClient(); //All ongoing fixtures for user
+    getAllTodayFixturesClient(); // All pending fixtures for user
 
     var d = new Date();
     var month = d.getMonth()+1;
@@ -21,6 +23,13 @@ $(document).ready(function(){
     $("#cont").html(firstname + " " + lastname);
 
 
+    var client_user = localStorage.getItem('client_user');
+    var client_pass = localStorage.getItem('client_pass');
+    var client_firstname = localStorage.getItem('client_firstname');
+    var client_lastname = localStorage.getItem('client_lastname');
+    $("#client_cont").html(client_firstname + " " + client_lastname);
+
+
     $("#signin").submit(function (event) {
         $.post("http://localhost:3000/admin/signin", $("#signin").serialize(), function (data) {
             //alert(JSON.stringify(data.UserDetails[0].ID)) //data is the response from the backend
@@ -30,13 +39,6 @@ $(document).ready(function(){
             localStorage.setItem('lastname', data.UserDetails[0].Lastname);
 
             window.location.href = 'admin/index.html';
-        });
-        event.preventDefault();
-    });
-
-    $("#c_signin").submit(function (event) {
-        $.post("http://localhost:3000/user/signin", $("#c_signin").serialize(), function (data) {
-            alert(JSON.stringify(data)) //data is the response from the backend
         });
         event.preventDefault();
     });
@@ -85,16 +87,29 @@ $(document).ready(function(){
     });
 
     $("#user_reg_form").submit(function (event) {
-        var dialog = bootbox.dialog({
-            title: 'Go Score - User registration',
-            message: '<p><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;&nbsp;Please wait...</p>'
+        $.post("http://localhost:3000/user/signup/", $("#user_reg_form").serialize(), function (data) {
+            $("#txtFirstname").val("");
+            $("#txtLastname").val("");
+            $("#txtClientRegUsername").val("");
+            $("#txtClientRegPassword").val("");
+            
+            $("#success_msg").append('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         });
-                    
-        dialog.init(function(){
-            setTimeout(function(){
-                dialog.find('.bootbox-body').html("Congratulations to you motherfucker");
-            }, 10000);
+
+        event.preventDefault();
+    });
+
+    $("#client_login").submit(function (event) {
+        $.post("http://localhost:3000/user/signin", $("#client_login").serialize(), function (data) {
+            //bootbox.alert("Data: " + JSON.stringify(data.message)) //data is the response from the backend
+            localStorage.setItem('client_user', data.UserDetails[0].Username);
+            localStorage.setItem('client_pass', data.UserDetails[0].Password);
+            localStorage.setItem('client_firstname', data.UserDetails[0].Firstname);
+            localStorage.setItem('client_lastname', data.UserDetails[0].Lastname);
+
+            window.location.href = 'users/index.html';
         });
+        event.preventDefault();
     });
 });
 
@@ -113,6 +128,47 @@ function allteams() {
             $("#teams").append('<tr><td>' + data.Teams[i].ID + '</td><td>' + data.Teams[i].TeamName + '</td><td>' + data.Teams[i].TeamDetails + '</td><td></td></tr>');
             $("#txtTeamOne").append('<option value="' + data.Teams[i].TeamName + '">' + data.Teams[i].TeamName + '</option>');
             $("#txtTeamTwo").append('<option value="' + data.Teams[i].TeamName + '">' + data.Teams[i].TeamName + '</option>');
+        }
+    });
+}
+
+function getAllOngoingFixturesClient() {
+    $("#today_ongoing_fixture_client").empty();
+
+    var currentdate = new Date(); 
+    var year = currentdate.getFullYear();
+    var month = currentdate.getMonth()+1;
+    var day = currentdate.getDate();
+    var hours = currentdate.getHours();
+    var minutes = currentdate.getMinutes();
+
+    var matchDay = year + '-' + (month<10 ? '0' : '') + month + '-' + (day<10 ? '0' : '') + day;
+    var matchDayTime = matchDay + " " + (hours<10 ? '0' : '') + hours + ":" + (minutes<10 ? '0' : '') + minutes;
+
+    $.get("http://localhost:3000/fixture/today/ongoing/", {match: matchDay}, function (data) {
+        for (var i = 0; i < data.Fixture.length; i++) {
+            $("#today_ongoing_fixture_client").append('<tr><td>' + data.Fixture[i].FixtureDate + '</td><td>' + data.Fixture[i].TeamOneID + '</td><td>' + data.Fixture[i].TeamOneScore + " - " + data.Fixture[i].TeamTwoScore +  '</td><td>' + data.Fixture[i].TeamTwoID + '</td></tr>');
+        }
+        
+    });
+}
+
+function getAllTodayFixturesClient() {
+    $("#today_pending_fixture_client").empty();
+
+    var currentdate = new Date(); 
+    var year = currentdate.getFullYear();
+    var month = currentdate.getMonth()+1;
+    var day = currentdate.getDate();
+    var hours = currentdate.getHours();
+    var minutes = currentdate.getMinutes();
+
+    var matchDay = year + '-' + (month<10 ? '0' : '') + month + '-' + (day<10 ? '0' : '') + day;
+    var matchDayTime = matchDay + " " + (hours<10 ? '0' : '') + hours + ":" + (minutes<10 ? '0' : '') + minutes;
+
+    $.get("http://localhost:3000/fixture/today/", {match: matchDay}, function (data) {
+        for (var i = 0; i < data.Fixture.length; i++) {
+            $("#today_pending_fixture_client").append('<tr><td>' + data.Fixture[i].FixtureDate + '</td><td>' + data.Fixture[i].TeamOneID + '</td><td> VS </td><td>' + data.Fixture[i].TeamTwoID + '</td></tr>');
         }
     });
 }
@@ -287,4 +343,32 @@ function getFixturesByTime(theTime) {
 
     var matchDay = year + '-' + (month<10 ? '0' : '') + month + '-' + (day<10 ? '0' : '') + day;
     var matchDayTime = matchDay + " " + (hours<10 ? '0' : '') + hours + ":" + (minutes<10 ? '0' : '') + minutes;
+}
+
+function SearchOngoingMatch() {
+    //$("#today_ongoing_fixture_client").empty();
+
+    var currentdate = new Date(); 
+    var year = currentdate.getFullYear();
+    var month = currentdate.getMonth()+1;
+    var day = currentdate.getDate();
+    var hours = currentdate.getHours();
+    var minutes = currentdate.getMinutes();
+
+    var matchDay = year + '-' + (month<10 ? '0' : '') + month + '-' + (day<10 ? '0' : '') + day;
+    var matchDayTime = matchDay + " " + (hours<10 ? '0' : '') + hours + ":" + (minutes<10 ? '0' : '') + minutes;
+
+    var team = $("#txtSearchOngoingMatch").val();
+
+    $.get("http://localhost:3000/fixture/today/ongoing/fixture/", {TeamName: team, match: matchDay}, function (data) {
+        
+        if (data.message == "Fixtures Found") {
+            $("#today_ongoing_fixture_client").empty();
+            for (var i = 0; i < data.Fixtures.length; i++) {
+                $("#today_ongoing_fixture_client").append('<tr><td>' + data.Fixtures[i].FixtureDate + '</td><td>' + data.Fixtures[i].TeamOneID + '</td><td>' + data.Fixtures[i].TeamOneScore + " - " + data.Fixtures[i].TeamTwoScore +  '</td><td>' + data.Fixtures[i].TeamTwoID + '</td></tr>');
+            }
+        } else {
+            getAllOngoingFixturesClient();
+        }
+    });
 }
